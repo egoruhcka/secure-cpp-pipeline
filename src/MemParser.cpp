@@ -1,15 +1,4 @@
-class MemoryReport{
-private:
-    long MemTotal = 0;
-    long MemFree = 0;
-    long MemAvailable = 0;
-public:
-    MemoryReport(long t, long f, long a): MemTotal(t), MemFree(f), MemAvailable(a) {}
-
-    long getTotal()const{return MemTotal;}
-    long getFree()const{return MemFree;}
-    long getAvailable()const{return MemAvailable;}
-};
+#include "../include/memory.hpp" 
 
 const MemoryReport ParseMemoryInformation(std::shared_ptr<spdlog::logger> logger){
     if (!logger) {
