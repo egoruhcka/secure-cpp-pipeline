@@ -23,8 +23,8 @@ public:
     long getFree()const{return MemFree;}
     long getAvailable()const{return MemAvailable;}
 
-    std::string getString()const{return "MemTotal: " + std::to_string(MemTotal) 
-        + "\nmemFree: " + std::to_string(MemFree) + "\nmemAvailable: " + std::to_string(MemAvailable);}
+    std::string getString()const{return "TotalMemory:\"" + std::to_string(MemTotal) 
+        + "\", FreeMemory=\"" + std::to_string(MemFree) + "\", AvailableMemory:" + std::to_string(MemAvailable);}
 };
 
 const MemoryReport ParseMemoryInformation(

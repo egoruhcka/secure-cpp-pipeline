@@ -1,4 +1,5 @@
 #include "../include/dispatch.hpp"
+#include "../include/verParser.hpp"
 
 namespace MyDispatchFunc{
 
@@ -22,15 +23,16 @@ std::string dispatch(std::shared_ptr<spdlog::logger> logger, std::string request
 std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string request){
     if(request == "memMetrics"){
         MyReportFunc::MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
-        return "Memory report:\n" + report.getString();
+        return "MemoryReport{" + report.getString() + "}";
     }
 
     if(request == "health"){
-        return "{\"status\":\"ok\"}";
+        return "{status=\"ok\"}";
     }
 
     if(request == "version"){
-        
+        std::string ver = MyVersionParser::parseVersionInformation(logger);
+        return "version{version=\"" + ver + "\"}";
     }
 
     return "";
