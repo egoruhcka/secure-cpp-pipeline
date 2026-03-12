@@ -22,4 +22,24 @@ std::string myRead(std::shared_ptr<spdlog::logger> logger, int clientFD){
     return res;
 }
 
+ssize_t myWrite(std::shared_ptr<spdlog::logger> logger, int clientFD, std::string answer){
+    ssize_t bytes = write(clientFD, answer.c_str(), answer.size());
+
+    if(bytes < 0){
+        logger->info("client {} disconected", clientFD);
+        return bytes;
+    }
+
+    else if(bytes < answer.size()){
+        logger->info("client {} received {} bytes", clientFD, bytes);
+        return bytes;
+    }
+
+    else{
+        logger->info("client received all of {} bytes", bytes);
+        return bytes;
+    }
+
+}
+
 }

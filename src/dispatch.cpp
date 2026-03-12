@@ -24,6 +24,15 @@ std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string requ
         MyReportFunc::MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
         return "Memory report:\n" + report.getString();
     }
+
+    if(request == "health"){
+        return "{\"status\":\"ok\"}";
+    }
+
+    if(request == "version"){
+        
+    }
+
     return "";
 }
 }
