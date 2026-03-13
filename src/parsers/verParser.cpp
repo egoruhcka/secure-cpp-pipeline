@@ -2,8 +2,16 @@
 
 namespace MyVersionParser{
 
-std::string parseVersionInformation(std::shared_ptr<spdlog::logger> logger){
-    std::ifstream file("CMakeLists.txt");
+std::string parseVersionInformation(std::shared_ptr<spdlog::logger> logger, const std::string& path){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+
+    std::ifstream file(path);
     if(!file.is_open()){
         logger->error("CMakeFile is not found");
         throw std::runtime_error("cant find cmakefile");

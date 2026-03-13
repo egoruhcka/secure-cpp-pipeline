@@ -10,7 +10,7 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include <iostream> 
 
-namespace MyReportFunc{
+
 class MemoryReport{
 private:
     long MemTotal = 0;
@@ -26,7 +26,7 @@ public:
     std::string getString()const{return "TotalMemory:\"" + std::to_string(MemTotal) 
         + "\", FreeMemory=\"" + std::to_string(MemFree) + "\", AvailableMemory:" + std::to_string(MemAvailable);}
 };
-
+namespace MyReportFunc{
 const MemoryReport ParseMemoryInformation(
     std::shared_ptr<spdlog::logger> logger, 
     std::istream* input = nullptr

@@ -11,8 +11,12 @@ find_package(spdlog REQUIRED)
 find_package(GTest REQUIRED)
 
 add_executable(app 
-    src/memParser.cpp
+    src/parsers/memParser.cpp
     src/main.cpp
+    src/dispatch.cpp
+    src/utility/myUnix.cpp
+    src/utility/sockets.cpp
+    src/parsers/verParser.cpp
 )
 
 target_include_directories(app PUBLIC 
@@ -25,7 +29,13 @@ enable_testing()
 
 add_executable(unit_tests 
     tests/testMemParser.cpp 
-    src/memParser.cpp
+    tests/testVerParser.cpp
+
+    src/parsers/memParser.cpp
+    src/dispatch.cpp
+    src/utility/myUnix.cpp
+    src/utility/sockets.cpp
+    src/parsers/verParser.cpp
 )
 
 target_include_directories(unit_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

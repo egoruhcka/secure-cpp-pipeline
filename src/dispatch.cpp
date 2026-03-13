@@ -22,7 +22,7 @@ std::string dispatch(std::shared_ptr<spdlog::logger> logger, std::string request
 
 std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string request){
     if(request == "memMetrics"){
-        MyReportFunc::MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
+        MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
         return "MemoryReport{" + report.getString() + "}";
     }
 
@@ -31,7 +31,7 @@ std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string requ
     }
 
     if(request == "version"){
-        std::string ver = MyVersionParser::parseVersionInformation(logger);
+        std::string ver = MyVersionParser::parseVersionInformation(logger, "../CMakeLists.txt");
         return "version{version=\"" + ver + "\"}";
     }
 

@@ -1,6 +1,7 @@
 #include "../include/sockets.hpp" 
 namespace MySocketFunc{
-void setSocket(std::shared_ptr<spdlog::logger>& logger, int& port, int& serverFD, struct sockaddr_in& addr){
+
+void setSocket(std::shared_ptr<spdlog::logger> logger, int& port, int& serverFD, struct sockaddr_in& addr){
     serverFD = socket(AF_INET, SOCK_STREAM, 0);
     if(serverFD == -1){
         logger->error("socket isnt create");
@@ -19,8 +20,8 @@ void setSocket(std::shared_ptr<spdlog::logger>& logger, int& port, int& serverFD
     listen(serverFD, 3);
 }
 
-void conectClient(std::shared_ptr<spdlog::logger>& logger, int& clientFD,
-                  sockaddr_in& clientAddr, int& serverFD, char* clientIP){
+void conectClient(std::shared_ptr<spdlog::logger> logger, int& clientFD,
+                  sockaddr_in& clientAddr, int& serverFD){
     socklen_t addrLen = sizeof(clientAddr);
     char clientIP[INET_ADDRSTRLEN] = {0};
 

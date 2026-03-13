@@ -7,5 +7,5 @@
 
 namespace MySocketFunc{
 void setSocket(std::shared_ptr<spdlog::logger> logger, int& port, int& serverFD, struct sockaddr_in& addr);
-void conectClient(std::shared_ptr<spdlog::logger>& logger, int& clientFD, sockaddr_in& clientAddr, int& serverFD);
+void conectClient(std::shared_ptr<spdlog::logger> logger, int& clientFD, sockaddr_in& clientAddr, int& serverFD);
 }
