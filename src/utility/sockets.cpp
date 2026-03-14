@@ -2,6 +2,14 @@
 namespace MySocketFunc{
 
 void setSocket(std::shared_ptr<spdlog::logger> logger, int& port, int& serverFD, struct sockaddr_in& addr){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+    
     serverFD = socket(AF_INET, SOCK_STREAM, 0);
     if(serverFD == -1){
         logger->error("socket isnt create");
@@ -21,8 +29,16 @@ void setSocket(std::shared_ptr<spdlog::logger> logger, int& port, int& serverFD,
 }
 
 void conectClient(std::shared_ptr<spdlog::logger> logger, int& clientFD,
-                  sockaddr_in& clientAddr, int& serverFD){
-    socklen_t addrLen = sizeof(clientAddr);
+                sockaddr_in& clientAddr, int& serverFD){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+    
+                    socklen_t addrLen = sizeof(clientAddr);
     char clientIP[INET_ADDRSTRLEN] = {0};
 
 

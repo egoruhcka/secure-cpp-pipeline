@@ -3,6 +3,14 @@
 namespace MyUnixFunc{
 
 std::string myRead(std::shared_ptr<spdlog::logger> logger, int clientFD){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+
     char buffer[1024] ={0};
     std::string res;
     ssize_t bytesRead = 1;
@@ -23,6 +31,14 @@ std::string myRead(std::shared_ptr<spdlog::logger> logger, int clientFD){
 }
 
 ssize_t myWrite(std::shared_ptr<spdlog::logger> logger, int clientFD, std::string answer){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+    
     ssize_t bytes = write(clientFD, answer.c_str(), answer.size());
 
     if(bytes < 0){

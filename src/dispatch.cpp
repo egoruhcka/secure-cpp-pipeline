@@ -4,12 +4,20 @@
 namespace MyDispatchFunc{
 
 std::string dispatch(std::shared_ptr<spdlog::logger> logger, std::string request){
+    if (!logger) {
+        logger = spdlog::get("default_logger");
+        if (!logger) {
+            auto null_sink = std::make_shared<spdlog::sinks::null_sink_st>();
+            logger = std::make_shared<spdlog::logger>("fallback", null_sink);
+        }
+    }
+    
     std::string html;
 
     if(request.find("GET") != std::string::npos){
         std::string getRequest = request.substr(request.find("GET") + 4);
         logger->debug("find get request");
-        std::string html = dispatchGet(logger, getRequest);
+        html = dispatchGet(logger, getRequest);
     }
 
     std::string answer = "HTTP/1.1 200 OK\r\n"

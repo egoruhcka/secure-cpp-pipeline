@@ -30,6 +30,9 @@ enable_testing()
 add_executable(unit_tests 
     tests/testMemParser.cpp 
     tests/testVerParser.cpp
+    tests/testMySocket.cpp
+    tests/testMyUnix.cpp
+    tests/testDispatch.cpp
 
     src/parsers/memParser.cpp
     src/dispatch.cpp
