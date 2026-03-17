@@ -1,9 +1,9 @@
 FROM fedora:latest AS builder
-RUN dnf install -y gcc-c++ cmake make spdlog-devel gtest-devel
+RUN dnf install -y gcc-c++ cmake make spdlog-devel gtest-devel ccache && \
+    dnf clean all
 WORKDIR /app
-COPY CMakeLists.txt .
-RUN mkdir build && cd build && cmake ..
 COPY . .
+RUN mkdir build && cd build && cmake ..
 RUN cd build && make -j$(nproc)
 
 FROM fedora:latest
