@@ -18,9 +18,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: ccache
-        uses: actions/cashe@v4
+        uses: actions/cache@v4
         with:
-          path: /root/.cashe/ccashe
+          path: /root/.cache/ccache
           key: ${{ runner.os }}-ccache-${{ hashFiles('**/CMakeLists.txt') }}
           restore-keys: |
             ${{ runner.os }}-ccache-
