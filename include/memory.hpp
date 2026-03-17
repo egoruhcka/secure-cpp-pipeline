@@ -7,6 +7,9 @@
 #include <sstream>
 #include <string>
 #include <spdlog/sinks/null_sink.h> 
+#include "spdlog/sinks/basic_file_sink.h"
+#include <iostream> 
+
 
 class MemoryReport{
 private:
@@ -19,6 +22,13 @@ public:
     long getTotal()const{return MemTotal;}
     long getFree()const{return MemFree;}
     long getAvailable()const{return MemAvailable;}
-};
 
-const MemoryReport ParseMemoryInformation(std::shared_ptr<spdlog::logger> logger);
+    std::string getString()const{return "TotalMemory:\"" + std::to_string(MemTotal) 
+        + "\", FreeMemory=\"" + std::to_string(MemFree) + "\", AvailableMemory:" + std::to_string(MemAvailable);}
+};
+namespace MyReportFunc{
+const MemoryReport ParseMemoryInformation(
+    std::shared_ptr<spdlog::logger> logger, 
+    std::istream* input = nullptr
+);
+}
