@@ -49,3 +49,9 @@ target_link_libraries(unit_tests PRIVATE
 )
 
 add_test(NAME MyMemTests COMMAND unit_tests)
+
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+endif()

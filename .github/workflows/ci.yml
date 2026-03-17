@@ -17,6 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: ccache
+        uses: actions/cashe@v4
+        with:
+          path: /root/.cashe/ccashe
+          key: ${{ runner.os }}-ccache-${{ hashFiles('**/CMakeLists.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-ccache-
+
       - name: Install dependencies
         run: |
           dnf install -y gcc-c++ cmake make spdlog-devel gtest-devel
