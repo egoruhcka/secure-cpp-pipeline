@@ -3,10 +3,10 @@
 #include <spdlog/sinks/null_sink.h>
 
 TEST(DispatchSimpleTest, HandlesHealth) {
-    std::string response = MyDispatchFunc::dispatch(nullptr, "GET health");
+    std::string response = MyDispatchFunc::dispatch(nullptr, "GET /health HTTP");
     
     EXPECT_NE(response.find("{status=\"ok\"}"), std::string::npos);
-    EXPECT_NE(response.find("Content-Length: 13"), std::string::npos);
+    EXPECT_NE(response.find("Content-Length: 14"), std::string::npos);
 }
 
 TEST(DispatchSimpleTest, NoGetRequest) {
@@ -17,7 +17,7 @@ TEST(DispatchSimpleTest, NoGetRequest) {
 
 TEST(DispatchSimpleTest, HandlesMemMetrics) {
     auto logger = std::make_shared<spdlog::logger>("test", std::make_shared<spdlog::sinks::null_sink_st>());
-    std::string response = MyDispatchFunc::dispatch(logger, "GET memMetrics");
+    std::string response = MyDispatchFunc::dispatch(logger, "GET /memMetrics HTTP");
     
     EXPECT_NE(response.find("MemoryReport{"), std::string::npos);
 }
@@ -33,7 +33,7 @@ TEST(DispatchSimpleTest, UnknownPath) {
 #include "../include/dispatch.hpp"
 
 TEST(DispatchSimpleTest, HandlesVersionFormat) {
-    std::string response = MyDispatchFunc::dispatch(nullptr, "GET version");
+    std::string response = MyDispatchFunc::dispatch(nullptr, "GET /version HTTP");
 
     ASSERT_NE(response.find("version{version=\""), std::string::npos);
 
