@@ -4,7 +4,7 @@
 #include "../include/dispatch.hpp"
 
 int main(){
-    std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "logs/log.txt");
+    std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "../logs/log.txt");
     logger->flush_on(spdlog::level::info);
 
     int serverFD, clientFD;
