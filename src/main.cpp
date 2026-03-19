@@ -6,25 +6,38 @@
 int main(){
     std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "../logs/log.txt");
     logger->flush_on(spdlog::level::info);
+    std::signal(SIGPIPE, SIG_IGN);
 
-    int serverFD, clientFD;
+    int serverFD = -1, clientFD = -1;
     struct sockaddr_in addr;
     int port = 8080;
 
     struct sockaddr_in clientAddr;
-
-    MySocketFunc::setSocket(logger, port, serverFD, addr);
+    try{
+        MySocketFunc::setSocket(logger, port, serverFD, addr);}
+    catch(const std::runtime_error& e){
+        logger->error("cant set socket");
+        return 1;
+    }
 
     while(true){
 
-        MySocketFunc::conectClient(logger, clientFD, clientAddr, serverFD);
+        try{
+            MySocketFunc::conectClient(logger, clientFD, clientAddr, serverFD);
+        }catch(const std::exception& e){continue;}
 
-        std::string request = MyUnixFunc::myRead(logger, clientFD);
+        try{
+            std::string request = MyUnixFunc::myRead(logger, clientFD);
 
-        std::string answer = MyDispatchFunc::dispatch(logger, request);
+            std::string answer = MyDispatchFunc::dispatch(logger, request);
 
-        MyUnixFunc::myWrite(logger, clientFD, answer);
+            MyUnixFunc::myWrite(logger, clientFD, answer);
+        }catch(const std::exception& e){
+            logger->error("Worker error: {}", e.what());
+            std::string errResp = "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n";
+            send(clientFD, errResp.c_str(), errResp.size(), MSG_NOSIGNAL);
+        }
 
-        close(clientFD);
+        if(clientFD > 0)close(clientFD);
     }
 }
