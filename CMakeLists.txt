@@ -17,6 +17,7 @@ add_executable(app
     src/utility/myUnix.cpp
     src/utility/sockets.cpp
     src/parsers/verParser.cpp
+    src/threadPool.cpp
 )
 
 target_include_directories(app PUBLIC 

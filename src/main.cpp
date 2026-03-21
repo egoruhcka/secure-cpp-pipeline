@@ -2,6 +2,7 @@
 #include "../include/sockets.hpp" 
 #include "../include/myUnix.hpp"
 #include "../include/dispatch.hpp"
+#include "../include/threadPool.hpp"
 
 int main(){
     std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "../logs/log.txt");
@@ -20,24 +21,14 @@ int main(){
         return 1;
     }
 
+    ThreadPool pool(std::thread::hardware_concurrency(), logger);
+
     while(true){
 
         try{
             MySocketFunc::conectClient(logger, clientFD, clientAddr, serverFD);
+        
+            pool.enqueue(clientFD);
         }catch(const std::exception& e){continue;}
-
-        try{
-            std::string request = MyUnixFunc::myRead(logger, clientFD);
-
-            std::string answer = MyDispatchFunc::dispatch(logger, request);
-
-            MyUnixFunc::myWrite(logger, clientFD, answer);
-        }catch(const std::exception& e){
-            logger->error("Worker error: {}", e.what());
-            std::string errResp = "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n";
-            send(clientFD, errResp.c_str(), errResp.size(), MSG_NOSIGNAL);
-        }
-
-        if(clientFD > 0)close(clientFD);
     }
 }
