@@ -13,16 +13,22 @@ std::string dispatch(std::shared_ptr<spdlog::logger> logger, std::string request
     }
     
     std::string html;
+    std::string contentType = "text/html"; 
 
     if(request.find("GET") != std::string::npos){
         std::string getRequest = request.substr(request.find("GET") + 4, request.find(" HTTP") - request.find("GET") - 4);
         logger->debug("find get request");
+
+        if (getRequest == "/metrics") {
+            contentType = "text/plain; version=0.0.4; charset=utf-8";
+        }
+
         html = dispatchGet(logger, getRequest);
         logger->debug("Extracted path: '{}'", getRequest);
     }
     
     std::string answer = "HTTP/1.1 200 OK\r\n"
-                "Content-Type: text/html\r\n"
+                "Content-Type: " + contentType + "\r\n"
                 "Content-Length: " + std::to_string(html.size()) + "\r\n"
                 "\r\n" + html;
     
@@ -34,7 +40,7 @@ std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string requ
         MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
         return report.toPrometheusString();
     }
-    
+
     if(request == "/memMetrics"){
         MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
         return "MemoryReport{" + report.getString() + "}\n";
@@ -45,8 +51,10 @@ std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string requ
     }
 
     if(request == "/version"){
-        std::string ver = MyVersionParser::parseVersionInformation(logger, "../CMakeLists.txt");
-        return "version{version=\"" + ver + "\"}\n";
+        #ifndef APP_VERSION
+            #define APP_VERSION "unknown"
+        #endif
+        return "version{version=\"" + std::string(APP_VERSION) + "\"}\n";
     }
 
     return "";
