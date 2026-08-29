@@ -30,6 +30,11 @@ std::string dispatch(std::shared_ptr<spdlog::logger> logger, std::string request
 }
 
 std::string dispatchGet(std::shared_ptr<spdlog::logger> logger, std::string request){
+    if(request == "/metrics"){
+        MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
+        return report.toPrometheusString();
+    }
+    
     if(request == "/memMetrics"){
         MemoryReport report = MyReportFunc::ParseMemoryInformation(logger, nullptr);
         return "MemoryReport{" + report.getString() + "}\n";

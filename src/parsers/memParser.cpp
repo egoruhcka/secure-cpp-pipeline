@@ -1,4 +1,4 @@
-#include "../include/memory.hpp" 
+#include "../../include/memory.hpp" 
 
 namespace MyReportFunc{
 const MemoryReport ParseMemoryInformation(std::shared_ptr<spdlog::logger> logger, std::istream* input) {
