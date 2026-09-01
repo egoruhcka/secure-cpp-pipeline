@@ -2,11 +2,20 @@
 #include "../include/sockets.hpp" 
 #include "../include/myUnix.hpp"
 #include "../include/dispatch.hpp"
+#include "spdlog/sinks/stdout_color_sinks.h" 
 #include "../include/threadPool.hpp"
 
 int main(){
-    std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "../logs/log.txt");
+    /*логирование в файл
+    std::shared_ptr<spdlog::logger> logger = spdlog::basic_logger_mt("my_logger", "../logs/log.txt");*/
+
+    //логирование в поток вывода, для легкого чтения из контейнера
+    auto logger = spdlog::stdout_color_mt("my_logger");
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+    logger->set_level(spdlog::level::debug);
     logger->flush_on(spdlog::level::info);
+    //-------
+
     std::signal(SIGPIPE, SIG_IGN);
 
     int serverFD = -1, clientFD = -1;

@@ -1,0 +1,30 @@
+{{- $name := .Chart.Name -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}-deployment
+  labels:
+    app: {{ $name }}
+spec:
+  replicas: {{ .Values.app.replicas | default 3 }}
+  selector:
+    matchLabels:
+      app: {{ $name }}-pod
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}-pod
+    spec:
+      containers:
+      - name: {{ $name }}-container
+        image: {{ .Values.app.image | default "mem-server:v1" }}
+        imagePullPolicy: Never
+        ports:
+        - containerPort: {{ .Values.app.containerPort | default 8080 }}
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"

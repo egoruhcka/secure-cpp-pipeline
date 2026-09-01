@@ -1,13 +1,16 @@
-FROM fedora:latest AS builder
-RUN dnf install -y gcc-c++ cmake make spdlog-devel gtest-devel ccache && \
-    dnf clean all
+FROM alpine:latest AS builder
+RUN apk add --no-cache \
+    g++ \
+    cmake \
+    make \
+    spdlog-dev \
+    gtest-dev
 WORKDIR /app
 COPY . .
-RUN mkdir build && cd build && cmake ..
-RUN cd build && make -j$(nproc)
+RUN mkdir build && cd build && cmake .. && make -j$(nproc)
 
-FROM fedora:latest
-RUN microdnf install -y spdlog
+FROM alpine:latest
+RUN apk add --no-cache spdlog
 WORKDIR /app
 COPY --from=builder /app/build/app .
 EXPOSE 8080

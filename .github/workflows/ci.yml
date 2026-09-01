@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /root/.cache/ccache
           key: ${{ runner.os }}-ccache-${{ hashFiles('**/CMakeLists.txt') }}
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build Docker Image
         run: docker build -t my-http-server:latest .
