@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mem-server-monitor
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: mem-server-service
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 10s
